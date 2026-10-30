@@ -134,7 +134,7 @@ export async function POST(req: Request) {
       calc: calcMatch?.[1],
       status: 'new',
       page: v.page || refPage,
-      utm,
+      utm: utm ? Object.entries(utm).map(([k, v]) => `${k}=${v}`).join(", ") : undefined,
       ip,
       consentAt: new Date().toISOString(),
       consentDoc: settings?.consentDocLabel || '/soglasie-pd/',

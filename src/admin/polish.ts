@@ -26,6 +26,23 @@ function walk(fields: Field[]): Field[] {
   })
 }
 
+/** Группы боковой панели: от частых действий к редким */
+const GROUP: Record<string, string> = {
+  leads: 'Заявки', subscribers: 'Заявки',
+  pages: 'Страницы сайта',
+  home: 'Страницы сайта', 'services-page': 'Страницы сайта', 'about-page': 'Страницы сайта', 'contacts-page': 'Страницы сайта',
+  'portfolio-page': 'Страницы сайта', 'blog-page': 'Страницы сайта', 'faq-page': 'Страницы сайта',
+  services: 'Контент', projects: 'Контент', posts: 'Контент', team: 'Контент', testimonials: 'Контент', media: 'Контент',
+  'service-categories': 'Рубрики', 'portfolio-categories': 'Рубрики', categories: 'Рубрики', tags: 'Рубрики',
+  settings: 'Настройки', navigation: 'Настройки', calculator: 'Настройки', redirects: 'Настройки', users: 'Настройки',
+}
+
+/** Какую страницу сайта показывать в предпросмотре глобалов */
+const GLOBAL_URL: Record<string, string> = {
+  home: '/', 'services-page': '/services/', 'about-page': '/about/', 'contacts-page': '/contacts/',
+  'portfolio-page': '/portfolio/', 'blog-page': '/blog/', 'faq-page': '/faq/', settings: '/contacts/', navigation: '/', calculator: '/#calculator',
+}
+
 const PREVIEW: Record<string, (slug: string) => string> = {
   services: paths.service,
   projects: paths.project,
@@ -38,8 +55,22 @@ export const polishCollection = (c: CollectionConfig): CollectionConfig => ({
   fields: walk(c.fields),
   admin: {
     ...c.admin,
-    ...(PREVIEW[c.slug] ? { preview: (doc: any) => (doc?.slug ? `${SITE_URL}${PREVIEW[c.slug](doc.slug)}` : null) } : {}),
+    group: GROUP[c.slug] ?? c.admin?.group,
+    ...(PREVIEW[c.slug]
+      ? {
+          preview: (doc: any) => (doc?.slug ? `${SITE_URL}${PREVIEW[c.slug](doc.slug)}` : null),
+          livePreview: { url: ({ data }: any) => `${SITE_URL}${data?.slug ? PREVIEW[c.slug](data.slug) : '/'}` },
+        }
+      : {}),
   },
 })
 
-export const polishGlobal = (g: GlobalConfig): GlobalConfig => ({ ...g, fields: walk(g.fields) })
+export const polishGlobal = (g: GlobalConfig): GlobalConfig => ({
+  ...g,
+  fields: walk(g.fields),
+  admin: {
+    ...g.admin,
+    group: GROUP[g.slug] ?? g.admin?.group,
+    ...(GLOBAL_URL[g.slug] ? { livePreview: { url: () => `${SITE_URL}${GLOBAL_URL[g.slug]}` } } : {}),
+  },
+})

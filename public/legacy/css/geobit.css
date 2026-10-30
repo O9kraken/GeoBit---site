@@ -18,3 +18,8 @@
 .gb-related-card:hover { border-color: rgba(124,0,255,0.3); }
 .gb-recent-link { transition: all 0.3s; }
 .gb-recent-link:hover { color: var(--accent-cyan); }
+
+/* Сайт внутри предпросмотра админки: без прелоадера, курсора и баннера cookie */
+.gb-in-preview #preloader, .gb-in-preview .gb-cursor, .gb-in-preview .gb-cursor-dot,
+.gb-in-preview #cb-scene, .gb-in-preview #cb-toast { display: none !important; }
+.gb-in-preview body { cursor: auto !important; }

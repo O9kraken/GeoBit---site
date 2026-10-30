@@ -41,6 +41,15 @@ export default buildConfig({
     components: {
       graphics: { Logo: '/components/admin/Logo#Logo', Icon: '/components/admin/Icon#Icon' },
       beforeDashboard: ['/components/admin/Dashboard#Dashboard'],
+      beforeNavLinks: ['/components/admin/NavExtras#NavExtras'],
+    },
+    // Предпросмотр рядом с формой; страница обновляется после каждого «Сохранить»
+    livePreview: {
+      breakpoints: [
+        { label: 'Телефон', name: 'mobile', width: 390, height: 844 },
+        { label: 'Планшет', name: 'tablet', width: 820, height: 1180 },
+        { label: 'Компьютер', name: 'desktop', width: 1440, height: 900 },
+      ],
     },
     dateFormat: 'dd.MM.yyyy HH:mm',
     // без Gravatar: админка не ходит на внешние сервисы
@@ -50,7 +59,8 @@ export default buildConfig({
   // порядок здесь = порядок групп в меню админки: заявки — первыми
   collections: [
     Leads, Subscribers,
-    Services, Projects, Posts, Pages, Team, Testimonials, Media,
+    Pages,
+    Services, Projects, Posts, Team, Testimonials, Media,
     ServiceCategories, PortfolioCategories, Categories, Tags,
     Users,
   ].map(polishCollection),

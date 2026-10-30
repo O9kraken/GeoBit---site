@@ -12,11 +12,11 @@ export const Leads: CollectionConfig = {
     group: 'Заявки',
     defaultColumns: ['name', 'phone', 'method', 'service', 'status', 'createdAt'],
     listSearchableFields: ['name', 'phone', 'email', 'service'],
-    description: 'Все заявки с форм сайта. Новые — со статусом «Новая»; поменяйте статус, когда свяжетесь с клиентом.',
   },
   defaultSort: '-createdAt',
   access: { read: authenticated, create: nobody, update: authenticated, delete: authenticated },
   fields: [
+    { name: 'contactActions', type: 'ui', admin: { components: { Field: '/components/admin/LeadContact#LeadContact' } } },
     { type: 'row', fields: [
       { name: 'name', label: 'Имя', type: 'text', required: true },
       { name: 'phone', label: 'Телефон', type: 'text' },
@@ -27,10 +27,10 @@ export const Leads: CollectionConfig = {
         { label: 'Telegram', value: 'telegram' }, { label: 'MAX', value: 'max' }, { label: 'Звонок', value: 'call' },
       ] },
       { name: 'service', label: 'Услуга', type: 'text' },
-      { name: 'budget', label: 'Бюджет', type: 'text' },
+      { name: 'budget', label: 'Бюджет', type: 'text', admin: { condition: (data) => Boolean(data?.budget) } },
     ] },
     { name: 'message', label: 'Сообщение', type: 'textarea' },
-    { name: 'calc', label: 'Расчёт калькулятора', type: 'textarea' },
+    { name: 'calc', label: 'Расчёт калькулятора', type: 'textarea', admin: { condition: (data) => Boolean(data?.calc) } },
     {
       name: 'status',
       label: 'Статус',
@@ -40,7 +40,7 @@ export const Leads: CollectionConfig = {
         { label: 'Новая', value: 'new' }, { label: 'В работе', value: 'progress' },
         { label: 'Закрыта: договор', value: 'won' }, { label: 'Закрыта: отказ', value: 'lost' }, { label: 'Спам', value: 'spam' },
       ],
-      admin: { position: 'sidebar' },
+      admin: { position: 'sidebar', components: { Cell: '/components/admin/StatusCell#StatusCell' } },
     },
     { name: 'note', label: 'Заметка менеджера', type: 'textarea', admin: { position: 'sidebar' } },
     {

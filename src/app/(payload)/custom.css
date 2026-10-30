@@ -50,3 +50,57 @@
 .gb-dash__quick a { display: flex; flex-direction: column; gap: 4px; transition: border-color .2s, transform .2s; }
 .gb-dash__quick a:hover { border-color: var(--gb-accent); transform: translateY(-2px); }
 .gb-dash__quick span { opacity: .65; font-size: 13px; }
+
+/* ===== Боковая панель ===== */
+.gb-nav-extras { display: flex; flex-direction: column; gap: 6px; margin: 4px 0 18px; }
+.gb-nav-extras a {
+  display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 10px;
+  text-decoration: none; color: var(--theme-text); background: var(--theme-elevation-50);
+  border: 1px solid var(--theme-elevation-100); font-weight: 500; transition: border-color .2s, background .2s;
+}
+.gb-nav-extras a:hover { border-color: var(--gb-accent); }
+.gb-nav-extras a span { width: 18px; text-align: center; opacity: .8; }
+.gb-nav-extras__leads b { margin-left: auto; min-width: 22px; padding: 1px 7px; border-radius: 20px; text-align: center; font-size: 12px; background: var(--theme-elevation-150); }
+.gb-nav-extras__leads.is-hot { background: var(--gb-grad); color: #fff !important; border-color: transparent; }
+.gb-nav-extras__leads.is-hot b { background: rgba(255,255,255,.25); }
+
+/* заголовки групп и пункты меню */
+.nav-group__toggle { font-size: 11px !important; letter-spacing: .08em; text-transform: uppercase; opacity: .55; margin-top: 6px; }
+.nav__link { border-radius: 8px; padding: 6px 10px !important; margin: 1px 0; transition: background .15s; }
+.nav__link:hover { background: var(--theme-elevation-100); }
+.nav__link.active, .nav__link[aria-current='page'] { background: var(--theme-elevation-100); font-weight: 600; }
+.nav__link .nav__link-label::before { display: inline-block; width: 22px; opacity: .85; }
+#nav-leads .nav__link-label::before { content: '✉'; }
+#nav-subscribers .nav__link-label::before { content: '☍'; }
+#nav-pages .nav__link-label::before { content: '§'; }
+#nav-global-home .nav__link-label::before { content: '⌂'; }
+#nav-global-services-page .nav__link-label::before,
+#nav-global-about-page .nav__link-label::before,
+#nav-global-contacts-page .nav__link-label::before,
+#nav-global-portfolio-page .nav__link-label::before,
+#nav-global-blog-page .nav__link-label::before,
+#nav-global-faq-page .nav__link-label::before { content: '▭'; }
+#nav-services .nav__link-label::before { content: '₽'; }
+#nav-projects .nav__link-label::before { content: '◧'; }
+#nav-posts .nav__link-label::before { content: '✎'; }
+#nav-team .nav__link-label::before { content: '☺'; }
+#nav-testimonials .nav__link-label::before { content: '★'; }
+#nav-media .nav__link-label::before { content: '▣'; }
+#nav-service-categories .nav__link-label::before,
+#nav-portfolio-categories .nav__link-label::before,
+#nav-categories .nav__link-label::before,
+#nav-tags .nav__link-label::before { content: '#'; }
+#nav-global-settings .nav__link-label::before { content: '⚙'; }
+#nav-global-navigation .nav__link-label::before { content: '☰'; }
+#nav-global-calculator .nav__link-label::before { content: '∑'; }
+#nav-redirects .nav__link-label::before { content: '↪'; }
+#nav-users .nav__link-label::before { content: '⚿'; }
+
+/* ===== Карточка заявки ===== */
+.gb-lead-actions { padding: 16px 18px; border-radius: 14px; border: 1px solid var(--theme-elevation-150); background: var(--theme-elevation-50); margin-bottom: 24px; display: flex; flex-direction: column; gap: 12px; }
+.gb-lead-actions__hint { opacity: .8; }
+.gb-lead-actions__row { display: flex; flex-wrap: wrap; gap: 8px; }
+.gb-btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 10px; border: 1px solid var(--theme-elevation-200); background: var(--theme-elevation-100); color: var(--theme-text) !important; text-decoration: none; cursor: pointer; font: inherit; }
+.gb-btn:hover { border-color: var(--gb-accent); }
+.gb-btn--accent { align-self: flex-start; background: var(--gb-grad); border: 0; color: #fff !important; font-weight: 600; }
+.gb-dash__st--spam, .gb-dash__st--lost { background: var(--theme-elevation-200); }

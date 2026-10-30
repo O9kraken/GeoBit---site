@@ -4,6 +4,7 @@ import React from 'react'
 import Footer from '@/components/Footer'
 import Header from '@/components/Header'
 import { LeadModal } from '@/components/LeadForm'
+import PreviewRefresh from '@/components/PreviewRefresh'
 import LegacyScripts from '@/components/LegacyScripts'
 import { JsonLd, LogoInner } from '@/components/Common'
 import { getGlobal, getServices } from '@/lib/payload'
@@ -46,7 +47,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     metrikaId: s?.metrikaId || '',
     chatSrc: s?.chatWidgetSrc || '',
   }
-  const boot = `${THEME_INIT}window.GEOBIT_CFG=${JSON.stringify(cfg)};window.adelfAjax={ajaxUrl:'/ajax/',nonce:'geobit'};window.adelfSubNonce='geobit';window.adelfCube={three:'/legacy/vendor/three.min.js'};`
+  const boot = `try{if(window.self!==window.top)document.documentElement.classList.add('gb-in-preview')}catch(e){}${THEME_INIT}window.GEOBIT_CFG=${JSON.stringify(cfg)};window.adelfAjax={ajaxUrl:'/ajax/',nonce:'geobit'};window.adelfSubNonce='geobit';window.adelfCube={three:'/legacy/vendor/three.min.js'};`
 
   return (
     <html lang="ru" data-theme="dark" suppressHydrationWarning>
@@ -59,6 +60,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <link rel="stylesheet" href="/legacy/css/geobit.css" />
       </head>
       <body suppressHydrationWarning>
+        <PreviewRefresh />
         <div className="gb-cursor" aria-hidden="true">
           <div className="gb-cursor-frame">
             <span className="gb-corner tl"></span>
