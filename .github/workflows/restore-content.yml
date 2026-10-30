@@ -1,0 +1,26 @@
+# Залить стартовый контент (услуги, кейсы, статьи, страницы, картинки) в базу Neon.
+# Запуск вручную: Actions → restore-content → Run workflow, в поле ввести ЗАМЕНИТЬ.
+# Секрет NEON_DATABASE_URL — строка подключения Neon БЕЗ «-pooler» в адресе (прямое соединение).
+# ВНИМАНИЕ: контентные таблицы в базе будут перезаписаны содержимым seed/geobit-content.dump.
+name: restore-content
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Напишите ЗАМЕНИТЬ, чтобы перезаписать базу'
+        required: true
+
+jobs:
+  restore:
+    if: ${{ inputs.confirm == 'ЗАМЕНИТЬ' }}
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq postgresql-client-16
+      - name: pg_restore
+        env:
+          DB: ${{ secrets.NEON_DATABASE_URL }}
+        run: |
+          /usr/lib/postgresql/16/bin/pg_restore --clean --if-exists --no-owner --no-acl --single-transaction -d "$DB" seed/geobit-content.dump
+          psql "$DB" -Atc "select 'услуг: '||count(*) from services; select 'картинок: '||count(*) from media_blobs;"

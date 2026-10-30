@@ -2,6 +2,13 @@ import { MigrateUpArgs, MigrateDownArgs, sql } from '@payloadcms/db-postgres'
 
 export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   await db.execute(sql`
+  CREATE TABLE IF NOT EXISTS "media_blobs" (
+  	"filename" text PRIMARY KEY NOT NULL,
+  	"mime_type" text NOT NULL,
+  	"data" bytea NOT NULL,
+  	"updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL
+  );
+
    CREATE TYPE "public"."enum_posts_status" AS ENUM('draft', 'published');
   CREATE TYPE "public"."enum__posts_v_version_status" AS ENUM('draft', 'published');
   CREATE TYPE "public"."enum_leads_method" AS ENUM('telegram', 'max', 'call');
@@ -321,6 +328,8 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"alt" varchar,
   	"wp_id" numeric,
   	"wp_path" varchar,
+  	"prefix" varchar DEFAULT '',
+  	"_objectkey" varchar,
   	"updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
   	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
   	"url" varchar,

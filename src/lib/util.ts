@@ -1,4 +1,5 @@
-export const SITE_URL = (process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000').replace(/\/$/, '')
+// Адрес сайта берётся при запуске: SERVER_URL → адрес Render → значение из сборки
+export const SITE_URL = (process.env.SERVER_URL || process.env.RENDER_EXTERNAL_URL || process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000').replace(/\/$/, '')
 
 /** Ссылка на медиафайл Payload (оригинал или размер) */
 export function mediaUrl(m: any, size?: 'thumb' | 'card' | 'wide'): string {

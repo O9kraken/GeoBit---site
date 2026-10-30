@@ -8,7 +8,7 @@
  */
 import type { Payload } from 'payload'
 
-const SITE = (process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000').replace(/\/$/, '')
+const SITE = (process.env.SERVER_URL || process.env.RENDER_EXTERNAL_URL || process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000').replace(/\/$/, '')
 const esc = (s: string) => s.replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' })[c]!)
 
 type Lead = { id: number | string; name?: string; phone?: string; email?: string; method?: string; service?: string; budget?: string; message?: string; page?: string }

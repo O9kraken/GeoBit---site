@@ -1,6 +1,8 @@
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
+import { cloudStoragePlugin } from '@payloadcms/plugin-cloud-storage'
 import { redirectsPlugin } from '@payloadcms/plugin-redirects'
+import { dbStorageAdapter } from './lib/db-storage'
 import { seoPlugin } from '@payloadcms/plugin-seo'
 import { EXPERIMENTAL_TableFeature, lexicalEditor } from '@payloadcms/richtext-lexical'
 import { ru } from '@payloadcms/translations/languages/ru'
@@ -30,7 +32,7 @@ const dirname = path.dirname(filename)
 const smtpReady = Boolean(process.env.SMTP_HOST && process.env.SMTP_USER)
 
 export default buildConfig({
-  serverURL: process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000',
+  serverURL: (process.env.SERVER_URL || process.env.RENDER_EXTERNAL_URL || process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000').replace(/\/$/, ''),
   admin: {
     user: Users.slug,
     importMap: { baseDir: path.resolve(dirname) },
@@ -52,7 +54,7 @@ export default buildConfig({
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: { outputFile: path.resolve(dirname, 'payload-types.ts') },
   db: postgresAdapter({
-    pool: { connectionString: process.env.DATABASE_URI || '', max: 5 },
+    pool: { connectionString: process.env.DATABASE_URI || '', max: 10 },
     // В разработке схема синхронизируется сама; в продакшене — миграции (npm run migrate)
     push: process.env.NODE_ENV !== 'production',
     // В продакшене схема создаётся/обновляется миграциями автоматически при старте
@@ -72,6 +74,13 @@ export default buildConfig({
     : undefined,
   sharp,
   plugins: [
+    // MEDIA_STORAGE=db — картинки хранятся в базе (Render + Neon на время разработки)
+    // (поля плагина добавляются всегда, чтобы схема базы не зависела от режима)
+    cloudStoragePlugin({
+      enabled: process.env.MEDIA_STORAGE === 'db',
+      alwaysInsertFields: true,
+      collections: { media: { adapter: dbStorageAdapter, disableLocalStorage: true } },
+    }),
     seoPlugin({
       collections: ['services', 'projects', 'posts', 'pages', 'categories', 'service-categories', 'portfolio-categories'],
       uploadsCollection: 'media',

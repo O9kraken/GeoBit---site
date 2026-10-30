@@ -263,6 +263,8 @@ export interface Media {
   alt?: string | null;
   wpId?: number | null;
   wpPath?: string | null;
+  prefix?: string | null;
+  _objectKey?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -1112,6 +1114,8 @@ export interface MediaSelect<T extends boolean = true> {
   alt?: T;
   wpId?: T;
   wpPath?: T;
+  prefix?: T;
+  _objectKey?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;

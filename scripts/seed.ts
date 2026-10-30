@@ -89,6 +89,12 @@ const group = (it: Item, re: RegExp) => {
     .sort((a, b) => a - b)
     .map((n) => out[n])
 }
+/** по одному — параллельные загрузки исчерпывают пул соединений */
+async function seq<T, R>(arr: T[], fn: (x: T) => Promise<R>): Promise<R[]> {
+  const out: R[] = []
+  for (const x of arr) out.push(await fn(x))
+  return out
+}
 const lines = (s: string) => s.split(/\r?\n/).map((x) => x.trim()).filter(Boolean)
 
 let payload: Payload
@@ -246,10 +252,8 @@ async function main() {
         url: m(it, 'portfolio_url') || undefined,
         excerpt: it.excerpt || autoExcerpt(it.content) || undefined,
         cover: await media(m(it, 'portfolio_cover') || m(it, '_thumbnail_id'), it.title),
-        gallery: (await Promise.all(gallery.map(async (g) => ({ image: await media(g, it.title) })))).filter((g) => g.image),
-        media: (
-          await Promise.all(mediaBlocks.map(async (b) => ({ image: await media(b.image, it.title), desc: b.desc || undefined })))
-        ).filter((b) => b.image),
+        gallery: (await seq(gallery, async (g) => ({ image: await media(g, it.title) }))).filter((g) => g.image),
+        media: (await seq(mediaBlocks, async (b) => ({ image: await media(b.image, it.title), desc: b.desc || undefined }))).filter((b) => b.image),
         challenge: m(it, 'portfolio_challenge') || undefined,
         solution: m(it, 'portfolio_solution') || undefined,
         categories: termsOf(it, 'portfolio_category'),
