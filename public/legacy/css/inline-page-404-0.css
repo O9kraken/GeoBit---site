@@ -1,0 +1,324 @@
+.page-404 {
+      padding: clamp(24px, 4vw, 48px) 16px 48px;
+    }
+
+    .page-404__inner {
+      width: min(100%, 760px);
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .page-404__hero,
+    .tron-wrap,
+    .tron-hud,
+    .tron-state-panel,
+    .page-404__actions {
+      width: 100%;
+    }
+
+    .page-404__hero {
+      display: block;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .page-404__hero.is-hidden {
+      display: none;
+    }
+
+    .page-404__code {
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    .page-404__title,
+    .page-404__desc {
+      max-width: 620px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .page-404__hint-start {
+      font-size: 13px;
+      color: var(--color-text-tertiary, #94a3b8);
+      margin-top: 1.5rem;
+      animation: neon-blink 1.6s ease-in-out infinite;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    @keyframes neon-blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.25; }
+    }
+
+    .tron-wrap {
+      display: none;
+      position: relative;
+      max-width: 700px;
+      margin: 0 auto;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(127,119,221,0.25);
+      box-shadow:
+        0 0 40px rgba(83,74,183,0.3),
+        inset 0 0 60px rgba(0,0,0,0.5);
+      background: #04060f;
+    }
+
+    .tron-wrap.visible {
+      display: block;
+    }
+
+    #tron-canvas {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 700 / 460;
+      background: #04060f;
+      touch-action: none;
+    }
+
+    .tron-hud {
+      display: none;
+      max-width: 700px;
+      margin: 12px auto 0;
+      font-family: monospace;
+      gap: 10px;
+      flex-direction: column;
+    }
+
+    .tron-hud.visible {
+      display: flex;
+    }
+
+    .tron-hud__stats {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .tron-hud__item {
+      flex: 1 1 0;
+      min-width: 0;
+    }
+
+    .tron-hud__center {
+      flex: 1.4 1 0;
+      text-align: center;
+    }
+
+    .tron-hud__right {
+      text-align: right;
+    }
+
+    .tron-hud__label {
+      display: block;
+      font-size: 9px;
+      letter-spacing: 2px;
+      color: rgba(127,119,221,0.5);
+      margin-bottom: 2px;
+    }
+
+    .tron-hud__val {
+      font-size: 20px;
+      font-weight: 700;
+      color: #AFA9EC;
+      text-shadow: 0 0 12px rgba(127,119,221,0.6);
+    }
+
+    #tronMsg {
+      font-size: 13px;
+      color: #D4537E;
+      text-shadow: 0 0 10px rgba(212,83,126,0.5);
+      letter-spacing: 1px;
+      display: inline-block;
+      min-height: 18px;
+    }
+
+    .tron-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      padding: 10px 14px;
+      border: 1px solid rgba(127,119,221,0.18);
+      border-radius: 14px;
+      background: var(--glass-card);
+      box-shadow: inset 0 0 20px rgba(127,119,221,0.06);
+    }
+
+    .tron-difficulty {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .tron-difficulty__btn,
+    .tron-action-btn,
+    .tron-play-btn {
+      appearance: none;
+      border: 1px solid rgba(127,119,221,0.3);
+      background: rgba(127,119,221,0.08);
+      color: #c9c5ff;
+      border-radius: 10px;
+      padding: 10px 14px;
+      line-height: 1;
+      cursor: pointer;
+      transition: .18s ease;
+      font-size: 13px;
+      font-weight: 600;
+      box-shadow: 0 0 0 rgba(127,119,221,0);
+    }
+
+    .tron-difficulty__btn:hover,
+    .tron-action-btn:hover,
+    .tron-play-btn:hover {
+      background: rgba(127,119,221,0.16);
+      border-color: rgba(127,119,221,0.55);
+      box-shadow: 0 0 18px rgba(127,119,221,0.18);
+    }
+
+    .tron-difficulty__btn.is-active {
+      color: #fff;
+      background: linear-gradient(180deg, rgba(127,119,221,0.35), rgba(127,119,221,0.16));
+      border-color: rgba(127,119,221,0.75);
+      box-shadow: 0 0 22px rgba(127,119,221,0.22);
+    }
+
+    .tron-action-btn:disabled {
+      opacity: .45;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .tron-state-panel {
+      max-width: 700px;
+      margin: 12px auto 0;
+      display: block;
+      text-align: center;
+      padding: 18px 16px;
+      border-radius: 16px;
+      border: 1px solid rgba(127,119,221,0.18);
+      background:
+        radial-gradient(circle at top, rgba(127,119,221,0.08), transparent 55%),
+        var(--glass-card);
+      box-shadow:
+        0 0 25px rgba(83,74,183,0.14),
+        inset 0 0 24px rgba(127,119,221,0.05);
+    }
+
+    .tron-state-panel.is-hidden {
+      display: none;
+    }
+
+    .tron-state-panel__title {
+      font-size: clamp(24px, 4vw, 34px);
+      font-weight: 700;
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+      color: #fff;
+    }
+
+    .tron-state-panel__text {
+      font-size: 15px;
+      color: var(--white-3);
+      margin-bottom: 8px;
+    }
+
+    .tron-state-panel__meta {
+      font-size: 13px;
+      color: rgba(175,169,236,0.82);
+      margin-bottom: 16px;
+    }
+
+    .tron-state-panel__actions {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .tron-state-panel[data-state="game-over"] .tron-state-panel__title {
+      color: #ffd7df;
+      text-shadow: 0 0 18px rgba(212,83,126,0.32);
+    }
+
+    .tron-state-panel[data-state="pause"] .tron-state-panel__title {
+      color: #d8d2ff;
+      text-shadow: 0 0 18px rgba(127,119,221,0.32);
+    }
+
+    .tron-state-panel[data-state="idle"] .tron-state-panel__title {
+      color: #d8d2ff;
+      text-shadow: 0 0 18px rgba(127,119,221,0.28);
+    }
+
+    .page-404__actions {
+      max-width: 700px;
+      margin: 24px auto 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .page-404__actions .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    @media (max-width: 767px) {
+      .page-404 {
+        padding-left: 12px;
+        padding-right: 12px;
+      }
+
+      .tron-hud__stats {
+        flex-wrap: wrap;
+        row-gap: 8px;
+      }
+
+      .tron-hud__item {
+        flex: 1 1 calc(50% - 6px);
+      }
+
+      .tron-hud__center {
+        order: 3;
+        flex-basis: 100%;
+        text-align: center;
+      }
+
+      .tron-hud__right {
+        text-align: left;
+      }
+
+      .tron-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .tron-difficulty,
+      .tron-toolbar__actions,
+      .tron-state-panel__actions {
+        width: 100%;
+      }
+
+      .tron-difficulty__btn,
+      .tron-action-btn,
+      .tron-play-btn {
+        width: 100%;
+      }
+
+      .tron-difficulty {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+    }

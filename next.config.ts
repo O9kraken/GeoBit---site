@@ -1,0 +1,55 @@
+import { withPayload } from '@payloadcms/next/withPayload'
+import type { NextConfig } from 'next'
+import path from 'path'
+import { fileURLToPath } from 'url'
+
+const __filename = fileURLToPath(import.meta.url)
+const dirname = path.dirname(__filename)
+
+const nextConfig: NextConfig = {
+  // Адреса как на старом сайте WordPress: /services/landing-page/
+  trailingSlash: true,
+  output: 'standalone',
+  poweredByHeader: false,
+  // Красивые адреса картинок: /media/файл.webp → файловый эндпоинт Payload
+  // Служебные адреса WordPress, которые могли попасть в поиск или закладки
+  async redirects() {
+    return [
+      { source: '/feed/', destination: '/blog/', statusCode: 301 },
+      { source: '/comments/feed/', destination: '/blog/', statusCode: 301 },
+      { source: '/:slug/feed/', destination: '/:slug/', statusCode: 301 },
+      { source: '/author/:name/', destination: '/blog/', statusCode: 301 },
+      { source: '/blog/page/:n/', destination: '/blog/?paged=:n', statusCode: 301 },
+      { source: '/home/', destination: '/', statusCode: 301 },
+      { source: '/sitemap_index.xml', destination: '/sitemap.xml', statusCode: 301 },
+      { source: '/page-sitemap.xml', destination: '/sitemap.xml', statusCode: 301 },
+      { source: '/post-sitemap.xml', destination: '/sitemap.xml', statusCode: 301 },
+      { source: '/service-sitemap.xml', destination: '/sitemap.xml', statusCode: 301 },
+      { source: '/portfolio-sitemap.xml', destination: '/sitemap.xml', statusCode: 301 },
+    ]
+  },
+  async rewrites() {
+    return [{ source: '/media/:file', destination: '/api/media/file/:file' }]
+  },
+  images: {
+    localPatterns: [
+      {
+        pathname: '/api/media/file/**',
+      },
+    ],
+  },
+  webpack: (webpackConfig) => {
+    webpackConfig.resolve.extensionAlias = {
+      '.cjs': ['.cts', '.cjs'],
+      '.js': ['.ts', '.tsx', '.js', '.jsx'],
+      '.mjs': ['.mts', '.mjs'],
+    }
+
+    return webpackConfig
+  },
+  turbopack: {
+    root: path.resolve(dirname),
+  },
+}
+
+export default withPayload(nextConfig, { devBundleServerPackages: false })

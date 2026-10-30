@@ -1,0 +1,57 @@
+# Пуш в main → сборка образа в GitHub (бесплатно) → публикация в GHCR → обновление на сервере по SSH.
+# Секреты репозитория: SSH_HOST, SSH_USER, SSH_KEY (приватный ключ), SSH_PORT (необязательно).
+name: deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency: deploy
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    outputs:
+      image: ${{ steps.meta.outputs.image }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: meta
+        run: echo "image=ghcr.io/${GITHUB_REPOSITORY,,}:${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          build-args: NEXT_PUBLIC_SERVER_URL=https://getgeobit.ru
+          tags: |
+            ${{ steps.meta.outputs.image }}
+            ghcr.io/${{ github.repository }}:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT || 22 }}
+          script: |
+            set -e
+            cd /opt/geobit
+            sed -i "s#^APP_IMAGE=.*#APP_IMAGE=${{ needs.build.outputs.image }}#" .env
+            docker compose pull app
+            docker compose up -d
+            docker image prune -f

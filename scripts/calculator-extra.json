@@ -1,0 +1,152 @@
+{
+ "addons": [
+  {
+   "key": "seo",
+   "name": "SEO-оптимизация",
+   "price": 15000
+  },
+  {
+   "key": "copy",
+   "name": "Тексты копирайтера",
+   "price": 12000
+  },
+  {
+   "key": "content",
+   "name": "Наполнение контентом",
+   "price": 9000
+  },
+  {
+   "key": "integ",
+   "name": "Интеграции (CRM, оплата)",
+   "price": 18000
+  }
+ ],
+ "blocks": [
+  {
+   "key": "hero",
+   "name": "Первый экран",
+   "icon": "fa-star",
+   "price": 5000
+  },
+  {
+   "key": "about",
+   "name": "О компании",
+   "icon": "fa-circle-info",
+   "price": 3000
+  },
+  {
+   "key": "services",
+   "name": "Услуги",
+   "icon": "fa-grip",
+   "price": 4000
+  },
+  {
+   "key": "advantages",
+   "name": "Преимущества",
+   "icon": "fa-award",
+   "price": 3000
+  },
+  {
+   "key": "steps",
+   "name": "Этапы работы",
+   "icon": "fa-list-ol",
+   "price": 3000
+  },
+  {
+   "key": "portfolio",
+   "name": "Портфолио",
+   "icon": "fa-images",
+   "price": 5000
+  },
+  {
+   "key": "catalog",
+   "name": "Каталог товаров",
+   "icon": "fa-store",
+   "price": 9000
+  },
+  {
+   "key": "pricing",
+   "name": "Тарифы",
+   "icon": "fa-tags",
+   "price": 4000
+  },
+  {
+   "key": "calculator",
+   "name": "Калькулятор расчёта",
+   "icon": "fa-calculator",
+   "price": 7000
+  },
+  {
+   "key": "team",
+   "name": "Команда",
+   "icon": "fa-users",
+   "price": 3000
+  },
+  {
+   "key": "reviews",
+   "name": "Отзывы",
+   "icon": "fa-quote-left",
+   "price": 3000
+  },
+  {
+   "key": "cases",
+   "name": "Кейсы",
+   "icon": "fa-folder-open",
+   "price": 4000
+  },
+  {
+   "key": "faq",
+   "name": "Вопросы-ответы",
+   "icon": "fa-circle-question",
+   "price": 2500
+  },
+  {
+   "key": "gallery",
+   "name": "Галерея/фото",
+   "icon": "fa-photo-film",
+   "price": 3000
+  },
+  {
+   "key": "video",
+   "name": "Видео-блок",
+   "icon": "fa-circle-play",
+   "price": 3000
+  },
+  {
+   "key": "cta",
+   "name": "Призыв к действию",
+   "icon": "fa-bullhorn",
+   "price": 2500
+  },
+  {
+   "key": "form",
+   "name": "Форма заявки",
+   "icon": "fa-paper-plane",
+   "price": 3000
+  },
+  {
+   "key": "blog",
+   "name": "Блог/новости",
+   "icon": "fa-newspaper",
+   "price": 5000
+  },
+  {
+   "key": "partners",
+   "name": "Партнёры/клиенты",
+   "icon": "fa-handshake",
+   "price": 2500
+  },
+  {
+   "key": "stats",
+   "name": "Цифры/достижения",
+   "icon": "fa-chart-simple",
+   "price": 2500
+  },
+  {
+   "key": "map",
+   "name": "Карта/контакты",
+   "icon": "fa-location-dot",
+   "price": 3000
+  }
+ ]
+}

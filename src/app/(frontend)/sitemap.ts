@@ -1,0 +1,40 @@
+export const dynamic = 'force-dynamic'
+
+import type { MetadataRoute } from 'next'
+import { getPosts, getProjects, getServices, getTerms, payload } from '@/lib/payload'
+import { SITE_URL, paths } from '@/lib/util'
+
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const p = await payload()
+  const [services, projects, posts, pages, scats, pcats, cats] = await Promise.all([
+    getServices(),
+    getProjects(),
+    getPosts(),
+    p.find({ collection: 'pages', limit: 100, depth: 0, where: { noindex: { not_equals: true } } }),
+    getTerms('service-categories'),
+    getTerms('portfolio-categories'),
+    getTerms('categories'),
+  ])
+  const u = (path: string, lastModified?: string, priority = 0.6): MetadataRoute.Sitemap[number] => ({
+    url: `${SITE_URL}${path}`,
+    lastModified: lastModified ? new Date(lastModified) : undefined,
+    priority,
+  })
+  return [
+    u('/', undefined, 1),
+    u('/services/', undefined, 0.9),
+    u('/portfolio/', undefined, 0.8),
+    u('/about/', undefined, 0.7),
+    u('/contacts/', undefined, 0.8),
+    u('/blog/', undefined, 0.7),
+    u('/faq/', undefined, 0.5),
+    ...services.map((s: any) => u(paths.service(s.slug), s.updatedAt, 0.9)),
+    ...projects.map((x: any) => u(paths.project(x.slug), x.updatedAt, 0.6)),
+    ...posts.map((x: any) => u(paths.post(x.slug), x.updatedAt, 0.7)),
+    ...pages.docs.map((x: any) => u(paths.page(x.slug), x.updatedAt, 0.3)),
+    ...scats.map((x: any) => u(paths.serviceCategory(x.slug), x.updatedAt, 0.5)),
+    ...pcats.map((x: any) => u(paths.portfolioCategory(x.slug), x.updatedAt, 0.4)),
+    ...cats.map((x: any) => u(paths.category(x.slug), x.updatedAt, 0.4)),
+  ]
+}

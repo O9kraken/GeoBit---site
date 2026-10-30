@@ -1,0 +1,86 @@
+/* ========================================================
+   GeoBit — кастомный курсор «Уголки-рамка»
+   Курсор поверх всего (включая попап). Системный курсор скрыт.
+   Включается только на устройствах с мышью (см. cursor.js).
+======================================================== */
+
+/* Прячем системный курсор по всему сайту, только когда активен кастомный */
+html.geobit-cursor-on,
+html.geobit-cursor-on * {
+    cursor: none !important;
+}
+
+/* Контейнер курсора — поверх всего */
+.gb-cursor {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+    z-index: 2147483647; /* максимум, поверх попапа и любого контента */
+    opacity: 0;
+    transition: opacity 0.25s ease;
+}
+.gb-cursor.is-visible { opacity: 1; }
+
+/* Рамка из четырёх уголков (следует за мышью с инерцией) */
+.gb-cursor-frame {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 28px;
+    height: 28px;
+    margin: -14px 0 0 -14px;
+    pointer-events: none;
+    transition: width 0.18s ease, height 0.18s ease, margin 0.18s ease;
+    will-change: transform, width, height;
+}
+.gb-corner {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border: 2px solid var(--accent-cyan, #00e5ff);
+	border-radius: 0px !important;
+}
+.gb-corner.tl { top: 0;    left: 0;   border-right: none; border-bottom: none; }
+.gb-corner.tr { top: 0;    right: 0;  border-left: none;  border-bottom: none; }
+.gb-corner.bl { bottom: 0; left: 0;   border-right: none; border-top: none;    }
+.gb-corner.br { bottom: 0; right: 0;  border-left: none;  border-top: none;    }
+
+/* Точка-спутник (строго под мышью) */
+.gb-cursor-dot {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 5px;
+    height: 5px;
+    margin: -2.5px 0 0 -2.5px;
+    border-radius: 50%;
+    background: var(--accent-pink, #ff3db8);
+    pointer-events: none;
+    will-change: transform;
+}
+
+/* Состояние при наведении на кликабельное — рамка раскрывается */
+.gb-cursor.is-hover .gb-cursor-frame {
+    width: 46px;
+    height: 46px;
+    margin: -23px 0 0 -23px;
+}
+.gb-cursor.is-hover .gb-corner {
+    border-color: var(--accent-cyan, #00e5ff);
+}
+
+/* Состояние нажатия — лёгкое сжатие */
+.gb-cursor.is-down .gb-cursor-frame {
+    width: 22px;
+    height: 22px;
+    margin: -11px 0 0 -11px;
+}
+
+/* На сенсорных устройствах курсор скрыт полностью (страховка) */
+@media (hover: none), (pointer: coarse) {
+    .gb-cursor, .gb-cursor-dot { display: none !important; }
+    html.geobit-cursor-on, html.geobit-cursor-on * { cursor: auto !important; }
+}

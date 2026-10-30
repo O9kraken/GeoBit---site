@@ -1,0 +1,50 @@
+# Сервер: app (Next.js + Payload) + PostgreSQL 16 + Caddy (HTTPS от Let's Encrypt).
+# Запуск: docker compose up -d   (переменные — в .env рядом с этим файлом)
+services:
+  app:
+    image: ${APP_IMAGE:-ghcr.io/OWNER/geobit-site:latest}
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      DATABASE_URI: postgres://geobit:${POSTGRES_PASSWORD}@db:5432/geobit
+    volumes:
+      - media:/app/media
+    depends_on:
+      db:
+        condition: service_healthy
+    mem_limit: 700m
+    logging: { driver: json-file, options: { max-size: '10m', max-file: '3' } }
+
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: geobit
+      POSTGRES_USER: geobit
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    command: ['postgres', '-c', 'shared_buffers=64MB', '-c', 'max_connections=30']
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U geobit -d geobit']
+      interval: 10s
+      retries: 10
+    mem_limit: 300m
+    logging: { driver: json-file, options: { max-size: '10m', max-file: '3' } }
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports: ['80:80', '443:443', '443:443/udp']
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on: [app]
+    mem_limit: 100m
+
+volumes:
+  media:
+  pgdata:
+  caddy_data:
+  caddy_config:

@@ -1,0 +1,20 @@
+# HTTPS-сертификат Caddy получит сам, когда A-записи домена смотрят на этот сервер.
+getgeobit.ru {
+	encode zstd gzip
+	# Статика темы и картинки — долгий кэш
+	@static path /legacy/* /_next/static/* /media/* /favicon.svg /logo.svg
+	header @static Cache-Control "public, max-age=2592000"
+	header {
+		X-Content-Type-Options nosniff
+		Referrer-Policy strict-origin-when-cross-origin
+		X-Frame-Options SAMEORIGIN
+		-Server
+	}
+	reverse_proxy app:3000 {
+		header_up X-Real-IP {remote_host}
+	}
+}
+
+www.getgeobit.ru {
+	redir https://getgeobit.ru{uri} permanent
+}
