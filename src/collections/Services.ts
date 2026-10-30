@@ -6,7 +6,7 @@ import { faqField } from '../fields/faq'
 export const Services: CollectionConfig = {
   slug: 'services',
   labels: { singular: 'Услуга', plural: 'Услуги' },
-  admin: { useAsTitle: 'title', group: 'Контент', defaultColumns: ['title', 'price', 'order', 'updatedAt'] },
+  admin: { useAsTitle: 'title', group: 'Контент', defaultColumns: ['title', 'price', 'duration', 'category', 'order'] },
   defaultSort: 'order',
   access: { read: anyone, create: authenticated, update: authenticated, delete: authenticated },
   fields: [

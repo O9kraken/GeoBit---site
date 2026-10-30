@@ -11,6 +11,8 @@ export const Leads: CollectionConfig = {
     useAsTitle: 'name',
     group: 'Заявки',
     defaultColumns: ['name', 'phone', 'method', 'service', 'status', 'createdAt'],
+    listSearchableFields: ['name', 'phone', 'email', 'service'],
+    description: 'Все заявки с форм сайта. Новые — со статусом «Новая»; поменяйте статус, когда свяжетесь с клиентом.',
   },
   defaultSort: '-createdAt',
   access: { read: authenticated, create: nobody, update: authenticated, delete: authenticated },

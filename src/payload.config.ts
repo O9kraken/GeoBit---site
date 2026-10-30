@@ -25,6 +25,7 @@ import { Calculator } from './globals/Calculator'
 import { Navigation } from './globals/Navigation'
 import { AboutPage, BlogPage, ContactsPage, FaqPage, HomePage, PortfolioPage, ServicesPage } from './globals/PageGlobals'
 import { SiteSettings } from './globals/SiteSettings'
+import { polishCollection, polishGlobal } from './admin/polish'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -36,18 +37,24 @@ export default buildConfig({
   admin: {
     user: Users.slug,
     importMap: { baseDir: path.resolve(dirname) },
-    meta: { titleSuffix: ' — GeoBit' },
+    meta: { titleSuffix: ' — GeoBit', icons: [{ rel: 'icon', type: 'image/svg+xml', url: '/favicon.svg' }] },
+    components: {
+      graphics: { Logo: '/components/admin/Logo#Logo', Icon: '/components/admin/Icon#Icon' },
+      beforeDashboard: ['/components/admin/Dashboard#Dashboard'],
+    },
     dateFormat: 'dd.MM.yyyy HH:mm',
     // без Gravatar: админка не ходит на внешние сервисы
     avatar: 'default',
   },
   i18n: { supportedLanguages: { ru }, fallbackLanguage: 'ru' },
+  // порядок здесь = порядок групп в меню админки: заявки — первыми
   collections: [
-    Services, Projects, Posts, Pages, Team, Testimonials,
+    Leads, Subscribers,
+    Services, Projects, Posts, Pages, Team, Testimonials, Media,
     ServiceCategories, PortfolioCategories, Categories, Tags,
-    Leads, Subscribers, Media, Users,
-  ],
-  globals: [HomePage, ServicesPage, AboutPage, ContactsPage, PortfolioPage, BlogPage, FaqPage, SiteSettings, Navigation, Calculator],
+    Users,
+  ].map(polishCollection),
+  globals: [HomePage, ServicesPage, AboutPage, ContactsPage, PortfolioPage, BlogPage, FaqPage, SiteSettings, Navigation, Calculator].map(polishGlobal),
   editor: lexicalEditor({
     features: ({ defaultFeatures }) => [...defaultFeatures, EXPERIMENTAL_TableFeature()],
   }),

@@ -67,19 +67,19 @@ export interface Config {
   };
   blocks: {};
   collections: {
+    leads: Lead;
+    subscribers: Subscriber;
     services: Service;
     projects: Project;
     posts: Post;
     pages: Page;
     team: Team;
     testimonials: Testimonial;
+    media: Media;
     'service-categories': ServiceCategory;
     'portfolio-categories': PortfolioCategory;
     categories: Category;
     tags: Tag;
-    leads: Lead;
-    subscribers: Subscriber;
-    media: Media;
     users: User;
     redirects: Redirect;
     'payload-kv': PayloadKv;
@@ -89,19 +89,19 @@ export interface Config {
   };
   collectionsJoins: {};
   collectionsSelect: {
+    leads: LeadsSelect<false> | LeadsSelect<true>;
+    subscribers: SubscribersSelect<false> | SubscribersSelect<true>;
     services: ServicesSelect<false> | ServicesSelect<true>;
     projects: ProjectsSelect<false> | ProjectsSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
     team: TeamSelect<false> | TeamSelect<true>;
     testimonials: TestimonialsSelect<false> | TestimonialsSelect<true>;
+    media: MediaSelect<false> | MediaSelect<true>;
     'service-categories': ServiceCategoriesSelect<false> | ServiceCategoriesSelect<true>;
     'portfolio-categories': PortfolioCategoriesSelect<false> | PortfolioCategoriesSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     tags: TagsSelect<false> | TagsSelect<true>;
-    leads: LeadsSelect<false> | LeadsSelect<true>;
-    subscribers: SubscribersSelect<false> | SubscribersSelect<true>;
-    media: MediaSelect<false> | MediaSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
@@ -164,6 +164,55 @@ export interface UserAuthOperations {
     email: string;
     password: string;
   };
+}
+/**
+ * Все заявки с форм сайта. Новые — со статусом «Новая»; поменяйте статус, когда свяжетесь с клиентом.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "leads".
+ */
+export interface Lead {
+  id: number;
+  name: string;
+  phone?: string | null;
+  email?: string | null;
+  method?: ('telegram' | 'max' | 'call') | null;
+  service?: string | null;
+  budget?: string | null;
+  message?: string | null;
+  calc?: string | null;
+  status?: ('new' | 'progress' | 'won' | 'lost' | 'spam') | null;
+  note?: string | null;
+  page?: string | null;
+  utm?: string | null;
+  ip?: string | null;
+  consentAt?: string | null;
+  consentDoc?: string | null;
+  notify?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "subscribers".
+ */
+export interface Subscriber {
+  id: number;
+  email: string;
+  status?: ('active' | 'unsubscribed') | null;
+  token?: string | null;
+  ip?: string | null;
+  consentAt?: string | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -569,53 +618,6 @@ export interface Testimonial {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "leads".
- */
-export interface Lead {
-  id: number;
-  name: string;
-  phone?: string | null;
-  email?: string | null;
-  method?: ('telegram' | 'max' | 'call') | null;
-  service?: string | null;
-  budget?: string | null;
-  message?: string | null;
-  calc?: string | null;
-  status?: ('new' | 'progress' | 'won' | 'lost' | 'spam') | null;
-  note?: string | null;
-  page?: string | null;
-  utm?: string | null;
-  ip?: string | null;
-  consentAt?: string | null;
-  consentDoc?: string | null;
-  notify?:
-    | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
-    | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "subscribers".
- */
-export interface Subscriber {
-  id: number;
-  email: string;
-  status?: ('active' | 'unsubscribed') | null;
-  token?: string | null;
-  ip?: string | null;
-  consentAt?: string | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".
  */
 export interface User {
@@ -697,6 +699,14 @@ export interface PayloadLockedDocument {
   id: number;
   document?:
     | ({
+        relationTo: 'leads';
+        value: number | Lead;
+      } | null)
+    | ({
+        relationTo: 'subscribers';
+        value: number | Subscriber;
+      } | null)
+    | ({
         relationTo: 'services';
         value: number | Service;
       } | null)
@@ -721,6 +731,10 @@ export interface PayloadLockedDocument {
         value: number | Testimonial;
       } | null)
     | ({
+        relationTo: 'media';
+        value: number | Media;
+      } | null)
+    | ({
         relationTo: 'service-categories';
         value: number | ServiceCategory;
       } | null)
@@ -735,18 +749,6 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'tags';
         value: number | Tag;
-      } | null)
-    | ({
-        relationTo: 'leads';
-        value: number | Lead;
-      } | null)
-    | ({
-        relationTo: 'subscribers';
-        value: number | Subscriber;
-      } | null)
-    | ({
-        relationTo: 'media';
-        value: number | Media;
       } | null)
     | ({
         relationTo: 'users';
@@ -797,6 +799,43 @@ export interface PayloadMigration {
   batch?: number | null;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "leads_select".
+ */
+export interface LeadsSelect<T extends boolean = true> {
+  name?: T;
+  phone?: T;
+  email?: T;
+  method?: T;
+  service?: T;
+  budget?: T;
+  message?: T;
+  calc?: T;
+  status?: T;
+  note?: T;
+  page?: T;
+  utm?: T;
+  ip?: T;
+  consentAt?: T;
+  consentDoc?: T;
+  notify?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "subscribers_select".
+ */
+export interface SubscribersSelect<T extends boolean = true> {
+  email?: T;
+  status?: T;
+  token?: T;
+  ip?: T;
+  consentAt?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1007,6 +1046,62 @@ export interface TestimonialsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media_select".
+ */
+export interface MediaSelect<T extends boolean = true> {
+  alt?: T;
+  wpId?: T;
+  wpPath?: T;
+  prefix?: T;
+  _objectKey?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
+  sizes?:
+    | T
+    | {
+        thumb?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        card?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        wide?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+      };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "service-categories_select".
  */
 export interface ServiceCategoriesSelect<T extends boolean = true> {
@@ -1068,99 +1163,6 @@ export interface TagsSelect<T extends boolean = true> {
   slug?: T;
   updatedAt?: T;
   createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "leads_select".
- */
-export interface LeadsSelect<T extends boolean = true> {
-  name?: T;
-  phone?: T;
-  email?: T;
-  method?: T;
-  service?: T;
-  budget?: T;
-  message?: T;
-  calc?: T;
-  status?: T;
-  note?: T;
-  page?: T;
-  utm?: T;
-  ip?: T;
-  consentAt?: T;
-  consentDoc?: T;
-  notify?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "subscribers_select".
- */
-export interface SubscribersSelect<T extends boolean = true> {
-  email?: T;
-  status?: T;
-  token?: T;
-  ip?: T;
-  consentAt?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "media_select".
- */
-export interface MediaSelect<T extends boolean = true> {
-  alt?: T;
-  wpId?: T;
-  wpPath?: T;
-  prefix?: T;
-  _objectKey?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  url?: T;
-  thumbnailURL?: T;
-  filename?: T;
-  mimeType?: T;
-  filesize?: T;
-  width?: T;
-  height?: T;
-  focalX?: T;
-  focalY?: T;
-  sizes?:
-    | T
-    | {
-        thumb?:
-          | T
-          | {
-              url?: T;
-              width?: T;
-              height?: T;
-              mimeType?: T;
-              filesize?: T;
-              filename?: T;
-            };
-        card?:
-          | T
-          | {
-              url?: T;
-              width?: T;
-              height?: T;
-              mimeType?: T;
-              filesize?: T;
-              filename?: T;
-            };
-        wide?:
-          | T
-          | {
-              url?: T;
-              width?: T;
-              height?: T;
-              mimeType?: T;
-              filesize?: T;
-              filename?: T;
-            };
-      };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

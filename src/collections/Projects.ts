@@ -5,7 +5,7 @@ import { slugField } from '../fields/slug'
 export const Projects: CollectionConfig = {
   slug: 'projects',
   labels: { singular: 'Кейс', plural: 'Портфолио' },
-  admin: { useAsTitle: 'title', group: 'Контент', defaultColumns: ['title', 'year', 'isFeatured', 'order'] },
+  admin: { useAsTitle: 'title', group: 'Контент', defaultColumns: ['title', 'client', 'year', 'isFeatured', 'order'] },
   defaultSort: 'order',
   access: { read: anyone, create: authenticated, update: authenticated, delete: authenticated },
   fields: [
